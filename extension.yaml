@@ -1,0 +1,11 @@
+build:
+  type: mvn-quarkus-jib
+  properties:
+    container-name: extensions/admincentral
+    container-tag: latest
+deploy:
+  type: container-deploy
+  properties:
+    endpoint-prefix: admincentral
+    endpoint-accessibility: public
+

@@ -1,0 +1,14 @@
+datasource:
+  $type: contentTypeDatasource
+  workspace: watches
+  autoCreate: true
+
+model:
+  nodeType: module:second
+  properties:
+    - name: name
+      label: Name
+      required: true
+    - name: description
+      type: richText
+      label: Description
