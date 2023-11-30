@@ -18,7 +18,7 @@ public class AdmincentralResourceTest {
             .log().all()
             .body(
                 "size()", is(1),
-                "[0].name", equalTo("Name")
+                "[0].name", equalTo("watches")
             );
     }
 
