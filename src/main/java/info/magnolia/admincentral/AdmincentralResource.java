@@ -16,6 +16,6 @@ public class AdmincentralResource {
     @Path("/applications")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Application> applications() {
-        return List.of(new Application("Name", "Label App", AppType.CONTENT_TYPE));
+        return List.of(new Application("watches", "Watches", AppType.CONTENT_TYPE));
     }
 }
