@@ -2,5 +2,5 @@ package info.magnolia.admincentral.model;
 
 import java.util.Map;
 
-public record ActivateExtension(String name, Map<String, String> configValues) {
+public record ActivateExtension(String extensionId, Map<String, String> configValues) {
 }
