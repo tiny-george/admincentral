@@ -29,7 +29,7 @@ export const Marketplace = () => {
   const [extensions, setExtensions] = useState([])
 
   const fetchExtensions = () => {
-    fetch(import.meta.env.VITE_SERVER_URL + "/admincentral/extensions/" + subscriptionId)
+    fetch(import.meta.env.VITE_SERVER_URL + "/admincentral/availableExtensions/" + subscriptionId)
       .then(response => {
         return response.json()
       })

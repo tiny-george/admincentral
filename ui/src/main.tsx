@@ -9,6 +9,8 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { Watches } from "./components/Watches.tsx";
+import {ExtensionsManager} from "./components/ExtensionsManager.tsx";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,22 @@ const router = createBrowserRouter([
     element: <>
       <Head/>
       <Marketplace/>
+      <Footer/>
+    </>,
+  },
+  {
+    path: "watches",
+    element: <>
+      <Head/>
+      <Watches/>
+      <Footer/>
+    </>,
+  },
+  {
+    path: "extensions-manager",
+    element: <>
+      <Head/>
+      <ExtensionsManager/>
       <Footer/>
     </>,
   },

@@ -3,7 +3,10 @@ package info.magnolia.admincentral;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
 
-import info.magnolia.admincentral.model.ActivateExtension;
+import info.magnolia.admincentral.model.EnableExtension;
+import info.magnolia.extensibility.api.Extension;
+import info.magnolia.extensibility.api.ExtensionStatus;
+import info.magnolia.extensibility.api.Extensions;
 import info.magnolia.extensibility.api.availability.Availability;
 import info.magnolia.extensibility.api.availability.DisableExtensionRequest;
 import info.magnolia.extensibility.api.availability.EnableExtensionRequest;
@@ -13,6 +16,7 @@ import info.magnolia.response.Response;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +40,9 @@ public class AdmincentralResourceTest {
     @InjectMock
     Availability availability;
 
+    @InjectMock
+    Extensions extensions;
+
     @Test
     public void applicationsEndpoint() {
         given()
@@ -49,9 +56,22 @@ public class AdmincentralResourceTest {
     }
 
     @Test
-    public void subscriptionExtensions() {
+    public void allExtensions() {
         given()
-                .when().get("/admincentral/extensions/" + SUBSCRIPTION_ID)
+                .when().get("/admincentral/extensions")
+                .then().statusCode(200)
+                .log().all()
+                .body(
+                        "size()", is(1),
+                        "[0].name", equalTo("first"),
+                        "[0].available", equalTo(true)
+                );
+    }
+
+    @Test
+    public void availableSubscriptionExtensions() {
+        given()
+                .when().get("/admincentral/availableExtensions/" + SUBSCRIPTION_ID)
                 .then().statusCode(200)
                 .log().all()
                 .body(
@@ -63,7 +83,7 @@ public class AdmincentralResourceTest {
     @Test
     public void enableSubscriptionExtension() {
         given()
-                .body(new ActivateExtension(EXTENSION_ID, Map.of("shopify.token", "aToken")))
+                .body(new EnableExtension(EXTENSION_ID, Map.of("shopify.token", "aToken")))
                 .when().header("Content-Type", "application/json")
                 .post("/admincentral/extensions/" + SUBSCRIPTION_ID + "/enable")
                 .then().statusCode(202)
@@ -99,5 +119,12 @@ public class AdmincentralResourceTest {
         Mockito.when(availability.disable(new DisableExtensionRequest(
                         EXTENSION_ID, SUBSCRIPTION_ID)))
                 .thenReturn(Response.ok(EXTENSIONS.get(0)));
+        Mockito.when(availability.isAvailable(EXTENSION_ID))
+                .thenReturn(true);
+        Mockito.when(extensions.all())
+                .thenReturn(Stream.of(
+                        new Extension(EXTENSION_ID, "first", "first description", "owner@magnolia-cms.com",
+                                ExtensionStatus.READY, null, null, Set.of("someKey"), "someDeployId")
+                ));
     }
 }

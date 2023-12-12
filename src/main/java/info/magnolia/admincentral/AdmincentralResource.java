@@ -2,9 +2,12 @@ package info.magnolia.admincentral;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import info.magnolia.admincentral.model.ActivateExtension;
+import info.magnolia.admincentral.model.ContentTypeProperty;
+import info.magnolia.admincentral.model.EnableExtension;
 import info.magnolia.admincentral.model.AppType;
 import info.magnolia.admincentral.model.Application;
+import info.magnolia.admincentral.model.Extension;
+import info.magnolia.extensibility.api.Extensions;
 import info.magnolia.extensibility.api.availability.Availability;
 import info.magnolia.extensibility.api.availability.DisableExtensionRequest;
 import info.magnolia.extensibility.api.availability.EnableExtensionRequest;
@@ -27,9 +30,11 @@ import jakarta.ws.rs.core.Response;
 public class AdmincentralResource {
 
     private final Availability availability;
+    private final Extensions extensions;
 
     @Inject
-    public AdmincentralResource(Availability availability) {
+    public AdmincentralResource(Extensions extensions, Availability availability) {
+        this.extensions = extensions;
         this.availability = availability;
     }
 
@@ -41,7 +46,47 @@ public class AdmincentralResource {
     }
 
     @GET
-    @Path("/extensions/{subscription}")
+    @Path("/properties/{contentType}/{subscriptionId}")
+    @Produces(APPLICATION_JSON)
+    public List<ContentTypeProperty> contentTypeProperties(
+            @PathParam("contentType") String contentType,
+            @PathParam("subscriptionId") String subscriptionId) {
+        var colorPickerEnabled = availability.availableExtensions(subscriptionId)
+                .anyMatch(se -> "warp-extensions-color-picker".equals(se.name()) && se.enabled());
+        return List.of(
+                new ContentTypeProperty("name", "Name", "string", null),
+                new ContentTypeProperty("description", "Description", "textarea", null),
+                new ContentTypeProperty("color", "Color", "string", colorPickerEnabled ?
+                        "warp-extensions-color-picker": null)
+        );
+    }
+
+    @GET
+    @Path("/extensions")
+    @Produces(APPLICATION_JSON)
+    public List<Extension> currentExtensions() {
+        return allExtensions();
+    }
+
+    @POST
+    @Path("/extensions/activate/{extensionId}")
+    @Produces(APPLICATION_JSON)
+    @PermitAll
+    public Response activateExtension(@PathParam("extensionId") String extensionId) {
+        var response = availability.markAsAvailable(extensionId);
+        if (response.isOk()) {
+            return Response.accepted()
+                    .entity(allExtensions())
+                    .build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(response.getError().toString())
+                    .build();
+        }
+    }
+
+    @GET
+    @Path("/availableExtensions/{subscription}")
     @Produces(APPLICATION_JSON)
     public List<SubscriptionExtension> subscriptionExtensions(@PathParam("subscription") String subscription) {
         return availableExtensions(subscription);
@@ -52,10 +97,10 @@ public class AdmincentralResource {
     @Produces(APPLICATION_JSON)
     @Consumes(APPLICATION_JSON)
     @PermitAll
-    public Response enableExtension(@PathParam("subscription") String subscription, ActivateExtension activateExtension) {
+    public Response enableExtension(@PathParam("subscription") String subscription, EnableExtension enableExtension) {
         var enabled = availability.enable(
-                new EnableExtensionRequest(activateExtension.extensionId(), subscription,
-                        activateExtension.configValues()));
+                new EnableExtensionRequest(enableExtension.extensionId(), subscription,
+                        enableExtension.configValues()));
         if (enabled.isOk()) {
             return Response.accepted().entity(availableExtensions(subscription)).build();
         } else {
@@ -83,6 +128,13 @@ public class AdmincentralResource {
 
     private List<SubscriptionExtension> availableExtensions(String subscriptionId) {
         return availability.availableExtensions(subscriptionId)
+                .collect(Collectors.toList());
+    }
+
+    private List<Extension> allExtensions() {
+        return extensions.all()
+                .map(ext -> new Extension(ext.id(), ext.name(), ext.description(), ext.owner(), ext.status(),
+                        ext.deploymentId() != null, ext.multitenantConfigKeys(), availability.isAvailable(ext.id())))
                 .collect(Collectors.toList());
     }
 }
