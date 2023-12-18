@@ -56,6 +56,7 @@ public class AdmincentralResource {
         return List.of(
                 new ContentTypeProperty("name", "Name", "string", null),
                 new ContentTypeProperty("description", "Description", "textarea", null),
+                new ContentTypeProperty("shopify", "Shopify Item", "remote", "shopify-multi"),
                 new ContentTypeProperty("color", "Color", "string", colorPickerEnabled ?
                         "warp-extensions-color-picker": null)
         );

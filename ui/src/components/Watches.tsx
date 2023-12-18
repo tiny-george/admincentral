@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { AppContext } from '../AppContext.tsx'
+import { ExtensionRemoteSource } from './ExtensionRemoteSource.tsx';
 
 export const Watches = () => {
 
@@ -28,8 +29,11 @@ export const Watches = () => {
       <form>
         {properties.map(property => (
         <div className="form-group" key={property['name']}>
-          {property['extensionName'] && (
+          {property['extensionName'] && property['type'] !== "remote" && (
               <iframe src={"https://" + property['extensionName'] + ".exp.magnolia-cloud.com/"}></iframe>
+          )}
+          {property['extensionName'] && property['type'] === "remote" && (
+            <ExtensionRemoteSource name={property['name']} label={property['label']} subscriptionId={subscriptionId} extension={property['extensionName']} />
           )}
           {!property['extensionName'] && property['type'] === "string" && (
               <>

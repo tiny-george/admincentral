@@ -35,6 +35,6 @@ public class ReactRouterFilter implements ContainerResponseFilter {
         response.reset();
         response.setStatusCode(200);
         response.putHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_HTML_TYPE.toString());
-        requestContext.setRequestUri(URI.create("/"));
+        response.end();
     }
 }
