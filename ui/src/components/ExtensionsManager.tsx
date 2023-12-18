@@ -53,10 +53,10 @@ export const ExtensionsManager = () => {
                 <td>{extension['description']}</td>
                 <td>{extension['status']}</td>
                 {extension['available'] == true && (
-                    <td><button type="button" className="btn btn-secondary">Available</button></td>
+                    <td><button type="button" className="btn btn-secondary disabled">Available</button></td>
                 )}
                 {extension['available'] == false && (
-                    <td><button type="button" className="btn btn-secondary">Not Available</button></td>
+                    <td><button type="button" className="btn btn-secondary disabled">Not Available</button></td>
                 )}
                 {extension['available'] == false && (
                     <td><button type="button" onClick={()=> activateExtension(extension['id'])} className="btn btn-primary">Mark as available</button></td>

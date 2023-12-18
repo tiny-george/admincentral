@@ -9,8 +9,9 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { AppContext } from "./AppContext.tsx";
 import { Watches } from "./components/Watches.tsx";
-import {ExtensionsManager} from "./components/ExtensionsManager.tsx";
+import { ExtensionsManager } from "./components/ExtensionsManager.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,8 +48,12 @@ const router = createBrowserRouter([
   },
 ]);
 
+const value = { subscriptionId: "zpxvow3ismzwpot7", environment: "main" };
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AppContext.Provider value={value}>
+      <RouterProvider router={router} />
+    </AppContext.Provider>
   </React.StrictMode>,
 )

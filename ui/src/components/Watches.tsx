@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
-
-const subscriptionId = 'todoSubscriptionId';
+import { useContext } from 'react'
+import { AppContext } from '../AppContext.tsx'
 
 export const Watches = () => {
+
+  const subscriptionId = useContext(AppContext).subscriptionId;
 
   const [properties, setProperties] = useState([])
 

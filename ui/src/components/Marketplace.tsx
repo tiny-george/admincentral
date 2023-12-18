@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react'
 import Modal from 'react-modal'
+import { useContext } from 'react'
+import { AppContext } from '../AppContext.tsx'
 
 Modal.setAppElement('#root')
 
-const subscriptionId = 'todoSubscriptionId';
-
 export const Marketplace = () => {
+
+  const subscriptionId = useContext(AppContext).subscriptionId;
+
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)'
+    },
+  };
 
   let subtitle: HTMLDivElement | null;
   const [modalData, setModalData] = useState(
@@ -90,6 +103,7 @@ export const Marketplace = () => {
             isOpen={modalData.open}
             onAfterOpen={afterOpenModal}
             onRequestClose={closeModal}
+            style={customStyles}
           >
             <div className='text-dark' ref={(_subtitle) => (subtitle = _subtitle)} tabIndex={-1}>
               <div className="modal-dialog">
@@ -105,13 +119,9 @@ export const Marketplace = () => {
                     <div className="modal-body">
                       <p>Required config values:</p>
                       {modalData.requiredConfig.map(value => (
-                        <div className="row" key={value}>
-                          <div className="col-auto">
-                            <label htmlFor={value}>{value}</label>
-                          </div>
-                          <div className="col-auto">
-                            <input type="password" id={value} className="form-control"/>
-                          </div>
+                        <div className="row form-group" key={value}>
+                          <label htmlFor={value}>{value}</label>
+                          <input type="password" id={value} className="form-control"/>
                         </div>
                       ))}
                     </div> 
@@ -121,7 +131,7 @@ export const Marketplace = () => {
                         <p>This extension doesn't requires config</p>
                     </div> 
                   )}
-                  <div className="modal-footer">
+                  <div className="modal-footer btn-group">
                     <button type="button" className="btn btn-secondary" onClick={closeModal} data-bs-dismiss="modal">Close</button>
                     <button type="button" className="btn btn-primary" onClick={() => enableExtension(modalData.extensionId, modalData.requiredConfig)}>Activate</button>
                   </div>
@@ -145,10 +155,10 @@ export const Marketplace = () => {
                 <th scope="row">{extension['name']}</th>
                 <td>{extension['description']}</td>
                 {extension['enabled'] == true && (
-                  <td><button type="button" className="btn btn-secondary">Enabled</button></td>
+                  <td><button type="button" className="btn btn-secondary disabled">Enabled</button></td>
                 )}
                 {extension['enabled'] == false && (
-                    <td><button type="button" className="btn btn-secondary">Disabled</button></td>
+                    <td><button type="button" className="btn btn-secondary disabled">Disabled</button></td>
                 )}
                 {extension['enabled'] == false && (
                   <td><button type="button" onClick={() => openModal(extension['extensionId'], extension['name'], extension['description'], extension['requiredConfigKeys'])} className="btn btn-primary">Enable</button></td>
