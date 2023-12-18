@@ -39,20 +39,21 @@ export const Marketplace = () => {
   }
 
   const enableExtension = (extensionId: string, requiredConfig: string[]) => {
-    const configValues = new Map<string, string>();
+    const configValues: any = {};
     if (requiredConfig && requiredConfig.length > 0) {
       requiredConfig.forEach(element => {
         const value = (document.getElementById(element) as HTMLInputElement).value;
         if (!value || value === '') {
           throw new Error("Cannot leave empty config value for " + element);
         }
-        configValues.set(element, value);
+        configValues[element] = value;
       });
     }
+    const body = JSON.stringify({extensionId: extensionId, configValues: configValues})
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({extensionId: extensionId, configValues: configValues})
+      body: body
     };
     fetch(import.meta.env.VITE_SERVER_URL + "/admincentral/extensions/" + subscriptionId + "/enable", requestOptions)
       .then(response => response.json())
@@ -150,7 +151,7 @@ export const Marketplace = () => {
                     <td><button type="button" className="btn btn-secondary">Disabled</button></td>
                 )}
                 {extension['enabled'] == false && (
-                  <td><button type="button" onClick={() => openModal(extension['extensionId'], extension['name'], extension['description'], extension['requiredConfig'])} className="btn btn-primary">Enable</button></td>
+                  <td><button type="button" onClick={() => openModal(extension['extensionId'], extension['name'], extension['description'], extension['requiredConfigKeys'])} className="btn btn-primary">Enable</button></td>
                 )}
                 {extension['enabled'] == true && (
                     <td><button type="button" onClick={() => disableExtension(extension['extensionId'])} className="btn btn-primary">Disable</button></td>
