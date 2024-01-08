@@ -1,0 +1,12 @@
+model:
+  properties:
+    - name: id
+      type: string
+    - name: price
+      type: twoDecimalsNumber
+    - name: name
+      type: string
+    - name: description
+    - name: color
+    - name: shopify-item
+      type: string

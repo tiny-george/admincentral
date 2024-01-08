@@ -1,0 +1,33 @@
+name: watches-app
+label: Watches
+icon: content-app
+type: content-type
+datasource:
+  type: content
+  contentType: watch
+subApps:
+  browser:
+    type: list
+    properties:
+      - name: id
+        label: Watch Id
+      - name: description
+        label: About
+      - name: price
+        label: Price in Eur
+      - name: color
+        label: Color
+  detail:
+    type: form
+    properties:
+      - name: description
+        label: About
+      - name: shopify-item
+        label: Shopify
+        component:
+          type: select
+      - name: color
+        label: Color
+        component:
+          type: extension
+          extension: warp-extensions-color-picker

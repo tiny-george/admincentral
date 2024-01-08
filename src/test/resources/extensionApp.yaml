@@ -1,0 +1,19 @@
+name: shopify-items-app
+label: Shopify
+icon: extension
+type: custom
+datasource:
+  type: external
+  name: shopify
+subApps:
+  browser:
+    type: grid
+    properties:
+      - name: id
+        label: Shopify Id
+      - name: title
+        label: Item
+      - name: price
+        label: Price in Eur
+      - name: quantity
+        label: Remaining stock

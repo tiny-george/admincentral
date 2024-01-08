@@ -1,0 +1,28 @@
+type: extension
+name: shopify-multi
+url: https://shopify-multi.exp.magnolia-cloud.com
+traits:
+  - itemResolver
+  - listData
+  - schematic
+  - filter
+  - subscriptionContext
+#  - searchable
+#  - writeable
+#  - treeData
+#  - pagination
+#  - cacheable
+#openApi: https://shopify-multi.exp.magnolia-cloud.com/q/openapi
+#  { Some schema
+#    "id": "id",
+#    "name": "string",
+#    "age": "number",
+#    "shopify-item": "linkTo:shopify-multi"
+#  }
+#  [{
+#    "id": 4366,
+#    "name": "hhhh",
+#    "age": 5,
+#    "shopify-item": "someShopifyId"
+#  }]
+
