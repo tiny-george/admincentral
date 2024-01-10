@@ -2,7 +2,10 @@ package info.magnolia.admincentral;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import info.magnolia.admincentral.form.FormBuilderRequest;
+import info.magnolia.admincentral.form.FormBuilderResponse;
 import info.magnolia.admincentral.model.EnableExtension;
 import info.magnolia.extensibility.api.Extension;
 import info.magnolia.extensibility.api.ExtensionStatus;
@@ -102,12 +105,38 @@ public class AdmincentralResourceTest {
     }
 
     @Test
+    public void formBuilderWithOnlyContentType() {
+        var fields = given()
+                .body(new FormBuilderRequest(WATCH, ""))
+                .when().header("Content-Type", "application/json")
+                .post("/admincentral/formBuilder")
+                .then().statusCode(200)
+                .log().all()
+                .extract().body().as(FormBuilderResponse.class);
+
+        assertEquals(6, fields.count());
+    }
+
+    @Test
     public void index() {
         given()
                 .when().get("/")
                 .then().statusCode(200)
                 .log().all();
     }
+
+    private static final String WATCH = """
+name: watch
+properties:
+  - name: id
+  - name: price
+    type: twoDecimalsNumber
+  - name: name
+  - name: description
+  - name: color
+  - name: shopify-item
+    type: datasource:shopify-multi
+""";
 
     @BeforeEach
     public void setup() {

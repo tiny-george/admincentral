@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 import { AppContext } from "./AppContext.tsx";
 import { Watches } from "./components/Watches.tsx";
+import { FormBuilder } from "./components/FormBuilder.tsx";
 import { ExtensionsManager } from "./components/ExtensionsManager.tsx";
 
 const router = createBrowserRouter([
@@ -35,6 +36,14 @@ const router = createBrowserRouter([
     element: <>
       <Head/>
       <Watches/>
+      <Footer/>
+    </>,
+  },
+  {
+    path: "formBuilder",
+    element: <>
+      <Head/>
+      <FormBuilder/>
       <Footer/>
     </>,
   },

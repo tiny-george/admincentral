@@ -2,6 +2,8 @@ package info.magnolia.admincentral;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import info.magnolia.admincentral.form.FormBuilder;
+import info.magnolia.admincentral.form.FormBuilderRequest;
 import info.magnolia.admincentral.model.ContentTypeProperty;
 import info.magnolia.admincentral.model.EnableExtension;
 import info.magnolia.admincentral.model.AppType;
@@ -30,12 +32,14 @@ import jakarta.ws.rs.core.Response;
 public class AdmincentralResource {
 
     private final Availability availability;
+    private final FormBuilder formBuilder;
     private final Extensions extensions;
 
     @Inject
-    public AdmincentralResource(Extensions extensions, Availability availability) {
+    public AdmincentralResource(Extensions extensions, Availability availability, FormBuilder formBuilder) {
         this.extensions = extensions;
         this.availability = availability;
+        this.formBuilder = formBuilder;
     }
 
     @GET
@@ -125,6 +129,21 @@ public class AdmincentralResource {
                     .entity(disabled.getError().toString())
                     .build();
         }
+    }
+
+    @POST
+    @Path("/formBuilder")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    @PermitAll
+    public Response formBuilder(FormBuilderRequest formBuilderRequest) {
+        var response = formBuilder.build(formBuilderRequest);
+        if (response.isOk()) {
+            return Response.ok().entity(response.get()).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST)
+                .entity("Input:" + formBuilderRequest + " -> " + response.getError().getMessage())
+                .build();
     }
 
     private List<SubscriptionExtension> availableExtensions(String subscriptionId) {

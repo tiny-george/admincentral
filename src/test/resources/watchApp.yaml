@@ -30,4 +30,4 @@ subApps:
         label: Color
         component:
           type: extension
-          extension: warp-extensions-color-picker
+          value: warp-extensions-color-picker

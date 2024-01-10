@@ -35,6 +35,15 @@ export const Applications = () => {
         </div>
       )}
       <div className="row row-cols-1 row-cols-md-6 mb-6 text-center">
+        <div className="col" key={'formBuilder'}>
+          <AppCard
+              group={'Developer'}
+              label={'Form Builder'}
+              icon={'content-app'}
+              link={'formBuilder'}/>
+        </div>
+      </div>
+      <div className="row row-cols-1 row-cols-md-6 mb-6 text-center">
         <div className="col" key={'marketplace'}>
           <AppCard
               group={'Extensions'}
