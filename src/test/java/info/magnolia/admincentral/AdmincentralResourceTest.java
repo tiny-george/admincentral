@@ -118,6 +118,19 @@ public class AdmincentralResourceTest {
     }
 
     @Test
+    public void formBuilderWithContentTypeAndForm() {
+        var fields = given()
+                .body(new FormBuilderRequest(WATCH, FORM))
+                .when().header("Content-Type", "application/json")
+                .post("/admincentral/formBuilder")
+                .then().statusCode(200)
+                .log().all()
+                .extract().body().as(FormBuilderResponse.class);
+
+        assertEquals(3, fields.count());
+    }
+
+    @Test
     public void index() {
         given()
                 .when().get("/")
@@ -136,6 +149,22 @@ properties:
   - name: color
   - name: shopify-item
     type: datasource:shopify-multi
+""";
+
+    private static final String FORM = """
+properties:
+  - name: description
+    label: About
+  - name: shopify-item
+    label: Shopify
+    component:
+      type: select
+      value: hello {{id}}
+  - name: color
+    label: Color
+    component:
+      type: extension
+      value: warp-extensions-color-picker
 """;
 
     @BeforeEach

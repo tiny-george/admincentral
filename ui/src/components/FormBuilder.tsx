@@ -17,6 +17,20 @@ properties:
   - name: shopify-item
     type: datasource:shopify-multi`
 
+const default_form = `properties:
+  - name: description
+    label: About
+  - name: shopify-item
+    label: Shopify
+    component:
+      type: select
+      value: hello {{id}}
+  - name: color
+    label: Color
+    component:
+      type: extension
+      value: warp-extensions-color-picker`;
+
 export const FormBuilder = () => {
 
   const subscriptionId = useContext(AppContext).subscriptionId;
@@ -26,7 +40,7 @@ export const FormBuilder = () => {
 
   const [input, setInput] = useState({
     type: default_content_type,
-    form: ''
+    form: default_form
   })
 
   const handleContentTypeChange = (newType: string) => {
@@ -126,11 +140,14 @@ export const FormBuilder = () => {
                               <label htmlFor={property['name']}>{property['label']}</label>
                               <input type="text" className="form-control" id={property['name']}/>
                             </>)}
+                        {property['type'] === "externalComponent" && (
+                            <iframe src={"https://" + property['additionalData'] + ".exp.magnolia-cloud.com/"}></iframe>
+                        )}
                         {property['type'] === "select" && (
                             <>
                               <label htmlFor={property['name']}>{property['label']}</label>
                               <select name={property['name']} className="form-select">
-                                {property['additionalData'].map((item: any) => (
+                                {property['additionalData'] !== null && property['additionalData'].map((item: any) => (
                                     <option key={item['key']} value={item['key']}>{item['value']}</option>
                                 ))}
                               </select>
