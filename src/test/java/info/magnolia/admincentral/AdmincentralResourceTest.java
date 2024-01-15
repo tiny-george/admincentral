@@ -138,6 +138,22 @@ public class AdmincentralResourceTest {
                 .log().all();
     }
 
+    @Test
+    public void health() {
+        given()
+                .when().get("/q/health")
+                .then().statusCode(200)
+                .log().all();
+    }
+
+    @Test
+    public void frontendUrl() {
+        given()
+                .when().get("/formBuilder")
+                .then().statusCode(200)
+                .log().all();
+    }
+
     private static final String WATCH = """
 name: watch
 properties:
