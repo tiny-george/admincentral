@@ -11,10 +11,12 @@ import info.magnolia.admincentral.template.Mustache;
 import info.magnolia.response.Response;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class FormBuilder {
@@ -25,9 +27,10 @@ public class FormBuilder {
     private final DatasourceResolver datasourceResolver;
     private final Mustache mustache;
 
-    public FormBuilder() {
+    @Inject
+    public FormBuilder(DatasourceResolver datasourceResolver) {
         this.conversor = new YamlToObject();
-        this.datasourceResolver = new DatasourceResolver();
+        this.datasourceResolver = datasourceResolver;
         this.mustache = new Mustache();
     }
 
@@ -111,7 +114,10 @@ public class FormBuilder {
         Object additionalData = null;
         var type = property.type() == null || property.type().isEmpty() ? "string" : property.type();
         if (type.startsWith(DATASOURCE_TYPE_PREFIX)) {
-            var values = datasourceValues(type.substring(DATASOURCE_TYPE_PREFIX.length()), null).get();
+            var values = datasourceValues(type.substring(DATASOURCE_TYPE_PREFIX.length()), null);
+            if (values.hasError()) {
+                return Response.error(values.getError());
+            }
             type = "select";
             additionalData = values;
         }
@@ -137,7 +143,18 @@ public class FormBuilder {
         }
         var template = Optional.ofNullable(labelTemplate).orElse("{{id}}");
         return Response.ok(list.get().stream()
-                .map(item -> new KeyValue((String) item.get("id"), mustache.render(template, item)))
+                .map(item -> new KeyValue(id(item), mustache.render(template, item)))
                 .toList());
+    }
+
+    private String id(Map map) {
+        var id = map.get("id");
+        if (id instanceof Long longId) {
+            return Long.toString(longId);
+        }
+        if (id instanceof Integer integerId) {
+            return Integer.toString(integerId);
+        }
+        return (String) id;
     }
 }

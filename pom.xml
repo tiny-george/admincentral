@@ -16,6 +16,7 @@
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
     <surefire-plugin.version>3.0.0</surefire-plugin.version>
     <light.development.version>1.0.0-SNAPSHOT</light.development.version>
+    <extensibility.version>1.0.0-SNAPSHOT</extensibility.version>
   </properties>
 
   <dependencyManagement>
@@ -62,7 +63,7 @@
     <dependency>
       <groupId>info.magnolia.extensibility</groupId>
       <artifactId>manager-api</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>${extensibility.version}</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -71,7 +72,12 @@
     <dependency>
       <groupId>info.magnolia.extensibility</groupId>
       <artifactId>manager-http-client</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>${extensibility.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>info.magnolia.extensibility</groupId>
+      <artifactId>datasource-http</artifactId>
+      <version>${extensibility.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
