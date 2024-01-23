@@ -15,7 +15,7 @@ export const ExtensionRemoteSource = ({subscriptionId, extension, label, name}) 
         return response.json()
       })
       .then(data => {
-        setItems(data)
+        setItems(data.items)
       })
   }
 
