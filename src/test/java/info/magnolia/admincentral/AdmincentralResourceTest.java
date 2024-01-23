@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import info.magnolia.admincentral.datasource.DatasourceResolver;
 import info.magnolia.admincentral.form.FormBuilderRequest;
 import info.magnolia.admincentral.form.FormBuilderResponse;
 import info.magnolia.admincentral.model.EnableExtension;
@@ -31,7 +32,7 @@ import io.quarkus.test.junit.QuarkusTest;
 @QuarkusTest
 public class AdmincentralResourceTest {
 
-    private static final String SUBSCRIPTION_ID = "aSubscriptionId";
+    private static final String SUBSCRIPTION_ID = "zpxvow3ismzwpot7";
     private static final String EXTENSION_ID = "aExtensionId";
     private static final List<SubscriptionExtension> EXTENSIONS = List.of(
             new SubscriptionExtension(EXTENSION_ID, "first", "first description",
@@ -45,6 +46,9 @@ public class AdmincentralResourceTest {
 
     @InjectMock
     Extensions extensions;
+
+    @InjectMock
+    DatasourceResolver datasourceResolver;
 
     @Test
     public void applicationsEndpoint() {
@@ -122,6 +126,7 @@ public class AdmincentralResourceTest {
         var fields = given()
                 .body(new FormBuilderRequest(WATCH, FORM))
                 .when().header("Content-Type", "application/json")
+                .header("subscription-id", SUBSCRIPTION_ID)
                 .post("/admincentral/formBuilder")
                 .then().statusCode(200)
                 .log().all()
@@ -200,5 +205,11 @@ properties:
                         new Extension(EXTENSION_ID, "first", "first description", "owner@magnolia-cms.com",
                                 ExtensionStatus.READY, null, null, Set.of("someKey"), "someDeployId")
                 ));
+        Mockito.when(datasourceResolver.values("shopify-multi"))
+                .thenReturn(Response.ok(List.of(
+                        Map.of("id", 7L, "name", "seven", "desc", "is seven"),
+                        Map.of("id", "4", "name", "four", "desc", "is four"),
+                        Map.of("id", 2, "name", "two", "desc", "is two")
+                        )));
     }
 }

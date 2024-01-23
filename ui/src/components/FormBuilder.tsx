@@ -62,7 +62,7 @@ export const FormBuilder = () => {
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json',
-                 'subscription_id': subscriptionId },
+                 'subscription-id': subscriptionId },
       body: JSON.stringify(input)
     };
     fetch(import.meta.env.VITE_SERVER_URL + "/admincentral/formBuilder", requestOptions)
