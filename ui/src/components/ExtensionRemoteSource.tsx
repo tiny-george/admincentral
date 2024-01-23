@@ -6,7 +6,11 @@ export const ExtensionRemoteSource = ({subscriptionId, extension, label, name}) 
   const [items, setItems] = useState([])
 
   const fetchItems = () => {
-    fetch("https://" + extension + ".exp.magnolia-cloud.com/items/all/" + subscriptionId)
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'subscription-id': subscriptionId }
+    };
+    fetch("https://" + extension + ".exp.magnolia-cloud.com/items", requestOptions)
       .then(response => {
         return response.json()
       })
