@@ -119,7 +119,7 @@ public class FormBuilder {
                 return Response.error(values.getError());
             }
             type = "select";
-            additionalData = values;
+            additionalData = values.get();
         }
         if (!Set.of("select", "string").contains(type)) {
             return Response.ok(new Field(property.name(), property.name(), "unknown", "", "Type: " + type + " is not supported at the moment"));
