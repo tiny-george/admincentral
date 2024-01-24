@@ -25,7 +25,7 @@ export const ExtensionRemoteSource = ({subscriptionId, extension, label, name}) 
 
   return (
     <>
-      {items.length > 0 && (
+      {items && items.length > 0 && (
           <>
             <label htmlFor={name}>{label}</label>
             <select name={name} className="form-select">
@@ -35,8 +35,14 @@ export const ExtensionRemoteSource = ({subscriptionId, extension, label, name}) 
             </select>
           </>
       )}
-      {items.length == 0 && (
+      {items && items.length == 0 && (
           <p>No items</p>
+      )}
+      {!items && (
+          <>
+            <label htmlFor={name}>{label}</label>
+            <input type="text" className="form-control" id={name}/>
+          </>
       )}
     </>
   )
