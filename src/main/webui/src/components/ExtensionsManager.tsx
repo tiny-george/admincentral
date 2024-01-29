@@ -35,7 +35,7 @@ export const ExtensionsManager = () => {
     <main>
       {extensions.length > 0 && (
         <>
-          <h4>List of extensions</h4>
+          <h4>All extensions</h4>
           <table className="table table-borderless">
             <thead>
               <tr>

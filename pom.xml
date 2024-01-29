@@ -7,15 +7,17 @@
   <artifactId>admincentral-quarkus</artifactId>
   <name>extensibility :: admincentral quarkus</name>
   <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <maven.compiler.release>17</maven.compiler.release>
-    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>3.2.9.Final</quarkus.platform.version>
-    <skipITs>true</skipITs>
     <compiler-plugin.version>3.11.0</compiler-plugin.version>
-    <surefire-plugin.version>3.0.0</surefire-plugin.version>
-    <light.development.version>1.0.0-SNAPSHOT</light.development.version>
+    <maven.compiler.release>17</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+    <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+    <quarkus.platform.version>3.6.7</quarkus.platform.version>
+    <skipITs>true</skipITs>
+    <surefire-plugin.version>3.1.2</surefire-plugin.version>
+    <quarkus-quinoa.version>2.3.4</quarkus-quinoa.version>
+    <compiler.version>0.9.11</compiler.version>
     <extensibility.version>1.0.0-SNAPSHOT</extensibility.version>
   </properties>
 
@@ -34,19 +36,16 @@
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-arc</artifactId>
+      <artifactId>quarkus-resteasy-reactive</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy</artifactId>
+      <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss.slf4j</groupId>
-      <artifactId>slf4j-jboss-logmanager</artifactId>
+      <groupId>io.quarkiverse.quinoa</groupId>
+      <artifactId>quarkus-quinoa</artifactId>
+      <version>${quarkus-quinoa.version}</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -57,8 +56,8 @@
       <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
     <dependency>
-      <groupId>jakarta.inject</groupId>
-      <artifactId>jakarta.inject-api</artifactId>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-arc</artifactId>
     </dependency>
     <dependency>
       <groupId>info.magnolia.extensibility</groupId>
@@ -67,16 +66,11 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-client-jackson</artifactId>
+      <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
     </dependency>
     <dependency>
       <groupId>info.magnolia.extensibility</groupId>
       <artifactId>manager-http-client</artifactId>
-      <version>${extensibility.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>info.magnolia.extensibility</groupId>
-      <artifactId>datasource-http</artifactId>
       <version>${extensibility.version}</version>
     </dependency>
     <dependency>
@@ -86,9 +80,13 @@
     <dependency>
       <groupId>com.github.spullara.mustache.java</groupId>
       <artifactId>compiler</artifactId>
-      <version>0.9.11</version>
+      <version>${compiler.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>info.magnolia.extensibility</groupId>
+      <artifactId>datasource-http</artifactId>
+      <version>${extensibility.version}</version>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
@@ -105,7 +103,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <plugin>
@@ -151,15 +148,15 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
-            <configuration>
-              <systemPropertyVariables>
-                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                <maven.home>${maven.home}</maven.home>
-              </systemPropertyVariables>
-            </configuration>
           </execution>
         </executions>
+        <configuration>
+          <systemPropertyVariables>
+            <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+            <maven.home>${maven.home}</maven.home>
+          </systemPropertyVariables>
+        </configuration>
       </plugin>
     </plugins>
   </build>
