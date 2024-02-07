@@ -13,6 +13,7 @@ import {
 import { AppContext } from './AppContext.tsx';
 import { Watches } from './components/Watches.tsx';
 import { FormBuilder } from './components/FormBuilder.tsx';
+import { ComponentDesigner } from './components/ComponentDesigner.tsx';
 import { ExtensionsManager } from './components/ExtensionsManager.tsx';
 
 const App = () => (
@@ -23,6 +24,7 @@ const App = () => (
             <Route path="marketplace" element={<Marketplace />} />
             <Route path="watches" element={<Watches />} />
             <Route path="formBuilder" element={<FormBuilder />} />
+            <Route path="componentDesigner" element={<ComponentDesigner />} />
             <Route path="extensions-manager" element={<ExtensionsManager />} />
         </Routes>
         <Footer />
