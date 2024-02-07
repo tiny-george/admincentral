@@ -3,7 +3,7 @@ import { IFrameComponent } from "./IFrameComponent.tsx";
 
 export const ComponentDesigner = () => {
 
-  const [fields, setFields] = useState([])
+  const [fields, setFields] = useState<any[]>([])
   const [error, setError] = useState('')
 
   const [input, setInput] = useState({
