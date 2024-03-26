@@ -15,6 +15,7 @@ import { Watches } from './components/Watches.tsx';
 import { FormBuilder } from './components/FormBuilder.tsx';
 import { ComponentDesigner } from './components/ComponentDesigner.tsx';
 import { ExtensionsManager } from './components/ExtensionsManager.tsx';
+import { ExtensionsShopify } from './components/ExtensionsShopify.tsx';
 
 const App = () => (
     <>
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="formBuilder" element={<FormBuilder />} />
             <Route path="componentDesigner" element={<ComponentDesigner />} />
             <Route path="extensions-manager" element={<ExtensionsManager />} />
+            <Route path="extensions-shopify" element={<ExtensionsShopify />} />
         </Routes>
         <Footer />
     </>

@@ -65,6 +65,13 @@ export const Applications = () => {
               icon={'extension'}
               link={'extensions-manager'}/>
         </div>
+        <div className="col" key={'extensions-shopify'}>
+          <AppCard
+              group={'Extensions'}
+              label={'Shopify'}
+              icon={'extension'}
+              link={'extensions-shopify'}/>
+        </div>
       </div>
     </main>
   )

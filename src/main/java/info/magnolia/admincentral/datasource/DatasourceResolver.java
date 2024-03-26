@@ -3,7 +3,7 @@ package info.magnolia.admincentral.datasource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.magnolia.admincentral.EnvironmentContext;
 import info.magnolia.datasource.api.*;
-import info.magnolia.datasource.http.HttpDatasource;
+import info.magnolia.datasource.http.HttpItemDatasource;
 import info.magnolia.response.Response;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -37,15 +37,15 @@ public class DatasourceResolver {
         return Response.error(new Exception("Can not get values from datasource " + datasource));
     }
 
-    private Datasource<Map> extensionDatasource(String name) {
+    private Datasource extensionDatasource(String name) {
         //TODO traits from definition
         //TODO deal with datasource types?
         //TODO get id
         Function<Map, String> function = map -> (String) map.get("id");
-        Datasource<Map> ds = new HttpDatasource<>(name,
+        Datasource ds = new HttpItemDatasource<>(name,
                 //"http://localhost:8090",
                 "https://" + name + ".exp.magnolia-cloud.com",
-                DatasourceType.EXTENSION,
+                DatasourceType.ITEM,
                 Set.of(DatasourceTrait.LIST_ITEMS, DatasourceTrait.ITEM_RESOLVER),
                 Map.class, function, objectMapper);
         return ds;
